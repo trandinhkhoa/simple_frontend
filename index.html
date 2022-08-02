@@ -1,0 +1,24 @@
+<button onclick="clicked()" class="myButton">
+  Hello World
+</button>
+
+<div id="myDIV">
+  This is my DIV element.
+</div>
+
+<script type="text/javascript">
+  function clicked() {
+    let aElement = document.getElementById("myDIV");
+    if (aElement.style.display === "none") {
+      aElement.style.display = "block";
+    } else {
+      aElement.style.display = "none";
+    }
+  }
+</script>
+
+<style type="text/css">
+.myButton {
+  background-color: teal;
+}
+</style>
