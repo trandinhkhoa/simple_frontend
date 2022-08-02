@@ -5,9 +5,7 @@ const app = express();
 
 const PORT = 8080;
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/index.html"));
-})
+app.use(express.static("public"));
 
 app.listen(PORT, () => {
   console.log("Server is running at ", PORT);
