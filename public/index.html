@@ -1,10 +1,35 @@
 <link rel="stylesheet" type="text/css" href="styles.css" />
 <script src="index.js"></script>
 
-<button onclick="clicked()" class="myButton">
-  Hello World
-</button>
+<head>
+  <title>
+    A Simple ToDo App
+  </title>
+</head>
 
-<div id="myDIV">
-  This is my DIV element.
-</div>
+<body>
+    <h1>A Simple ToDo App</h1>
+
+    <input
+      id="newTask"
+      class="newTask"
+      placeholder="Enter your todo here">
+    <!-- a button in a form by default has type="submit"
+    which will reload the page
+    you can prevent the reload by calling inside the event handler event.preventDefault() -->
+    <!-- why Enter works with type=submit but not button ??? -->
+    <button id="addTaskButton" type="button" onclick="addTaskButtonClicked()">Add</button>
+
+
+    <div id="tasksList">
+      Task List
+      <!-- <div class="task">
+        <input type="checkbox">
+        <input
+          class="taskContent"
+          readonly/>
+        <button class="taskEdit">Edit</button>
+        <button class="taskDelete">Delete</button>
+      </div> -->
+    </div>
+</body>

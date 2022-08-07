@@ -1,3 +1,61 @@
-.myButton {
-  background-color: teal;
+:root {
+  font-size: 20px;
+  background-color: #e8dcb8;
+}
+
+* {
+  font-family: 'Monaco';
+}
+
+h1 {
+  width: 800px;
+  margin: 30px auto;
+}
+
+.newTask {
+  width: 700px;
+  /* rem = size relative to root element font size */
+  /* em = size relative to parent element font size, use it for margins, paddings */
+  /* px = use it for borders/widths */
+  height: 1.5rem;
+  margin-left: 2rem;
+}
+
+#addTaskButton {
+  background-color: blanchedalmond;
+  border-radius: 0.5rem;
+  height: 1.5rem;
+}
+
+.task {
+  /* width: 800px; */
+  margin-top: 0.5rem;
+}
+
+.taskContent {
+  height: 1.5rem;
+  width: 700px;
+  margin-left: 1rem;
+}
+
+.taskEdit {
+  background-color: darkcyan;
+  border-radius: 0.5rem;
+  height: 1.5rem;
+  margin-left: 1rem;
+}
+
+.taskSave {
+  background-color: darkcyan;
+  border-radius: 0.5rem;
+  height: 1.5rem;
+  margin-left: 1rem;
+  color: white;
+}
+
+.taskDelete {
+  background-color: indianred;
+  border-radius: 0.5rem;
+  height: 1.5rem;
+  margin-left: 0.5rem;
 }
