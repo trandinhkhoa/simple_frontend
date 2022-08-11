@@ -11,6 +11,9 @@
 // because code outside of this listener be executed before the one inside
 // at that time var `input` is still undefined
 window.addEventListener("load", () => {
+  todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+  localStorage.setItem('todos', JSON.stringify(todos));
   const input = document.getElementById("newTask");
   let addTaskButtonEl = document.getElementById("addTaskButton");
   addTaskButtonEl.setAttribute("disabled", "disabled");
@@ -21,18 +24,26 @@ window.addEventListener("load", () => {
       addTaskButtonEl.removeAttribute("disabled");
     }
   });
+
+  displayTodos();
 })
 
 
 
-function editTaskButtonClicked(aTaskEditButton, aTaskContent) {
+function editTaskButtonClicked(aTaskEditButton, aTaskContentInput, todo) {
   if (aTaskEditButton.innerText === "Edit") {
-    aTaskContent.removeAttribute('readonly');
-    aTaskContent.focus();
+    aTaskContentInput.removeAttribute('readonly');
+    aTaskContentInput.focus();
     aTaskEditButton.innerText = "Save";
     aTaskEditButton.classList.replace("taskEdit", "taskSave");
   } else {
-    aTaskContent.readOnly = true;
+    aTaskContentInput.readOnly = true;
+    // aEditedTodo = todos.find(iter => iter.id === todo.id);
+    // aEditedTodo.value = aTaskContentInput.value;
+    todo.value = aTaskContentInput.value;
+    // console.log("HELLO aEditedTodo = ", aEditedTodo);
+    // console.log("HELLO todos = ", todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
     aTaskEditButton.innerText = "Edit";
     aTaskEditButton.classList.replace("taskSave", "taskEdit");
   }
@@ -40,8 +51,30 @@ function editTaskButtonClicked(aTaskEditButton, aTaskContent) {
 
 function addTaskButtonClicked() {
   const input = document.getElementById("newTask");
-  console.log('a button clicked ', input.value);
 
+  let todo = {
+    "id": Date.now(),
+    "value": input.value
+  };
+  todos.push(todo);
+  localStorage.setItem('todos', JSON.stringify(todos));
+  displayATask(todo);
+
+  input.value = "";
+  input.dispatchEvent(new Event('input'));
+  input.focus();
+}
+
+function displayTodos() {
+
+  // https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing
+  // TLDR: modify todo will not change todos. only modifying properties of todo will
+  todos.forEach(todo => {
+    displayATask(todo);
+  });
+}
+
+function displayATask(todo) {
   let aTask = document.createElement("div");
   aTask.classList.add("task");
 
@@ -49,22 +82,19 @@ function addTaskButtonClicked() {
   aTaskCheckbox.type = "checkbox";
   aTask.appendChild(aTaskCheckbox);
 
-  let aTaskContent = document.createElement("input");
-  aTaskContent.classList.add("taskContent");
-  // can also use aTaskContent.setAttribute("readonly", "readonly")
-  aTaskContent.readOnly = true;
-  aTaskContent.value = input.value;
-  input.value = "";
-  input.dispatchEvent(new Event('input'));
-  input.focus();
-  aTask.appendChild(aTaskContent);
+  let aTaskContentInput = document.createElement("input");
+  aTaskContentInput.classList.add("taskContent");
+  // can also use aTaskContentInput.setAttribute("readonly", "readonly")
+  aTaskContentInput.readOnly = true;
+  aTaskContentInput.value = todo.value;
+  aTask.appendChild(aTaskContentInput);
 
   let aTaskEditButton = document.createElement("button");
   aTaskEditButton.classList.add("taskEdit");
   // innerText/inderHTML/textContent all work
   aTaskEditButton.innerText = "Edit";
   aTaskEditButton.addEventListener("click", () => {
-    editTaskButtonClicked(aTaskEditButton, aTaskContent);
+    editTaskButtonClicked(aTaskEditButton, aTaskContentInput, todo);
   });
   aTask.appendChild(aTaskEditButton);
 
@@ -73,6 +103,9 @@ function addTaskButtonClicked() {
   aTaskDeleteButton.innerText = "Delete";
   aTaskDeleteButton.addEventListener("click", () => {
     tasksList.removeChild(aTask);
+    // filter by reference
+    todos = todos.filter(iter => iter !== todo);
+    localStorage.setItem('todos', JSON.stringify(todos));
   });
 
   aTask.appendChild(aTaskDeleteButton);
