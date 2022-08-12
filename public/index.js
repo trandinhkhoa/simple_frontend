@@ -38,11 +38,7 @@ function editTaskButtonClicked(aTaskEditButton, aTaskContentInput, todo) {
     aTaskEditButton.classList.replace("taskEdit", "taskSave");
   } else {
     aTaskContentInput.readOnly = true;
-    // aEditedTodo = todos.find(iter => iter.id === todo.id);
-    // aEditedTodo.value = aTaskContentInput.value;
     todo.value = aTaskContentInput.value;
-    // console.log("HELLO aEditedTodo = ", aEditedTodo);
-    // console.log("HELLO todos = ", todos);
     localStorage.setItem('todos', JSON.stringify(todos));
     aTaskEditButton.innerText = "Edit";
     aTaskEditButton.classList.replace("taskSave", "taskEdit");
@@ -54,7 +50,8 @@ function addTaskButtonClicked() {
 
   let todo = {
     "id": Date.now(),
-    "value": input.value
+    "value": input.value,
+    "done": false
   };
   todos.push(todo);
   localStorage.setItem('todos', JSON.stringify(todos));
@@ -68,7 +65,7 @@ function addTaskButtonClicked() {
 function displayTodos() {
 
   // https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing
-  // TLDR: modify todo will not change todos. only modifying properties of todo will
+  // TLDR: reassign todo to another object will not change todos. only modifying properties of todo will
   todos.forEach(todo => {
     displayATask(todo);
   });
@@ -80,14 +77,22 @@ function displayATask(todo) {
 
   let aTaskCheckbox = document.createElement("input");
   aTaskCheckbox.type = "checkbox";
+  aTaskCheckbox.checked = todo.done;
   aTask.appendChild(aTaskCheckbox);
 
   let aTaskContentInput = document.createElement("input");
   aTaskContentInput.classList.add("taskContent");
   // can also use aTaskContentInput.setAttribute("readonly", "readonly")
+  aTaskContentInput.style.backgroundColor = todo.done ? "lightgreen" : "";
   aTaskContentInput.readOnly = true;
   aTaskContentInput.value = todo.value;
   aTask.appendChild(aTaskContentInput);
+
+  aTaskCheckbox.addEventListener("click", () => {
+    aTaskContentInput.style.backgroundColor = aTaskCheckbox.checked ? "lightgreen" : "";
+    todo.done = aTaskCheckbox.checked ? true : false;
+    localStorage.setItem('todos', JSON.stringify(todos));
+  })
 
   let aTaskEditButton = document.createElement("button");
   aTaskEditButton.classList.add("taskEdit");
